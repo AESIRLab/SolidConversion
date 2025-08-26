@@ -8,14 +8,16 @@ plugins {
 
 android {
     namespace = "com.example.solidconversion"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.solidconversion"
         minSdk = 30
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.01"
+        manifestPlaceholders["appAuthRedirectScheme"] = "com.example.SolidConversion"
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -56,6 +58,11 @@ dependencies {
     ksp("org.aesirlab:skannotationscompiler:$version")
     implementation("org.aesirlab:authlib:$version")
 
+    implementation (libs.coil.compose)
+    implementation(libs.androidx.datastore.preferences)
+    ksp("com.squareup:kotlinpoet:1.14.0")
+    ksp("com.squareup:kotlinpoet-ksp:1.12.0")
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -76,6 +83,9 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     debugImplementation(libs.ui.tooling)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.nimbus.jose.jwt)
+    implementation(libs.okhttp)
+    implementation(libs.appauth)
 
     implementation(libs.androidx.activity.compose)
 }
