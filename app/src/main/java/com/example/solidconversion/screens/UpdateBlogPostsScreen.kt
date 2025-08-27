@@ -75,7 +75,6 @@ import java.util.Locale
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun UpdateBlogPostsScreen() {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val store = AuthTokenStore(LocalContext.current.applicationContext)
     val navController = rememberNavController()
@@ -169,7 +168,7 @@ fun UpdateBlogPostsScreen() {
                             color = Color.White
                         )
                         Image(
-                            painter = painterResource(id = R.drawable.article_person_24px),
+                            painter = painterResource(id = R.drawable.article_person_white_36px),
                             contentDescription = "App logo"
                         )
                     }
@@ -339,7 +338,6 @@ fun UpdateBlogPostsScreen() {
                                             mediaUri = mediaUri
                                         )
                                     )
-                                    saveBlogLog(context)
                                     navController.navigate(BlogScreens.BlogList.name)
                                 }
                             },
@@ -366,7 +364,6 @@ fun UpdateBlogPostsScreen() {
                                     mediaUri = mediaUri
                                 )
                             )
-                            saveBlogLog(context)
                             navController.navigate(BlogScreens.BlogList.name)
                         }
                     },
@@ -377,15 +374,4 @@ fun UpdateBlogPostsScreen() {
             }
         }
     }
-}
-
-
-// Saves current date - used to see if user has already posted a blog for the day -> wont notify again
-fun saveBlogLog(context: Context) {
-    val sharedPreferences = context.getSharedPreferences("blogPrefs", Context.MODE_PRIVATE)
-    val editor = sharedPreferences.edit()
-
-    val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-    editor.putString("lastBlogDate", todayDate)
-    editor.apply()
 }

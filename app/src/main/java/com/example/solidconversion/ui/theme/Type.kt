@@ -5,6 +5,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.solidconversion.R
+import androidx.compose.ui.text.font.Font
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -31,4 +33,15 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
     */
+)
+val RubikMono = FontFamily(
+    Font(R.font.rubikmono)
+)
+
+val NewsCycle = FontFamily(
+    Font(R.font.newscycle)
+)
+
+val NewsCycleBold = FontFamily(
+    Font(R.font.newscycle_bold)
 )

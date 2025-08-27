@@ -59,7 +59,7 @@ fun StartAuthScreen(
         }
 
         Image(
-            painter = painterResource(id = R.drawable.article_person_24px),
+            painter = painterResource(id = R.drawable.article_person_64px),
             contentDescription = "App logo"
         )
         Text(

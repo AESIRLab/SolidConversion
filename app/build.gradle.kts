@@ -15,7 +15,7 @@ android {
         minSdk = 30
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0.01"
+        versionName = "1.0.02"
         manifestPlaceholders["appAuthRedirectScheme"] = "com.example.SolidConversion"
 
 
@@ -49,6 +49,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+val deleteFolder by tasks.registering(Delete::class) {
+    delete(layout.projectDirectory.dir("build"))
+}
+
+tasks.named("preBuild") {
+    dependsOn(deleteFolder)
 }
 
 val version = "0.0.51"
