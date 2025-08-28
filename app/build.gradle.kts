@@ -15,7 +15,7 @@ android {
         minSdk = 30
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0.02"
+        versionName = "1.0.04"
         manifestPlaceholders["appAuthRedirectScheme"] = "com.example.SolidConversion"
 
 
@@ -59,7 +59,7 @@ tasks.named("preBuild") {
     dependsOn(deleteFolder)
 }
 
-val version = "0.0.51"
+val version = "0.0.61-stable"
 dependencies {
     // Annotations
     implementation("org.aesirlab:sksolidannotations:$version")

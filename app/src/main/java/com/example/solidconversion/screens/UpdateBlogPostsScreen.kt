@@ -100,7 +100,27 @@ fun UpdateBlogPostsScreen() {
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
-                viewModel.fetchRemoteList()
+                val webId = store.getWebId().first()
+                viewModel.updateWebId(webId)
+                if (!viewModel.remoteIsAvailable()) {
+                    val accessToken = store.getAccessToken().first()
+                    val signingJwk = store.getSigner().first()
+                    val expirationTime = 3301220800000
+                    viewModel.setRemoteRepositoryData(
+                        accessToken,
+                        signingJwk,
+                        webId,
+                        expirationTime
+                    )
+                    viewModel.fetchRemoteList()
+                } else {    }
+            }
+        }
+    }
+
+    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+        coroutineScope.launch {
+            runBlocking {
                 val webId = store.getWebId().first()
                 viewModel.updateWebId(webId)
                 if (!viewModel.remoteIsAvailable()) {
@@ -113,27 +133,9 @@ fun UpdateBlogPostsScreen() {
                         webId,
                         expirationTime
                     )
-                } else {    }
-            }
-        }
-    }
-
-    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
-        runBlocking {
-            val webId = store.getWebId().first()
-            viewModel.updateWebId(webId)
-            if (!viewModel.remoteIsAvailable()) {
-                val accessToken = store.getAccessToken().first()
-                val signingJwk = store.getSigner().first()
-                val expirationTime = 2301220800000
-                viewModel.setRemoteRepositoryData(
-                    accessToken,
-                    signingJwk,
-                    webId,
-                    expirationTime
-                )
-            } else {
-                viewModel.fetchRemoteList()
+                } else {
+                    viewModel.fetchRemoteList()
+                }
             }
         }
     }
