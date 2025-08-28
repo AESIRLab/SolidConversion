@@ -106,7 +106,7 @@ fun BlogCard(
                         // Medium weight
                         append(
                             SimpleDateFormat("MM/dd/yyyy: hh:mm a", Locale.getDefault()).format(
-                                Date(blog.date)
+                                Date(blog.dateCreated)
                             )
                         )
                     }

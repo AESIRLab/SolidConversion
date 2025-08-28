@@ -46,7 +46,8 @@ data class BlogItem(
     var title: String,
     var subtitle: String,
     var body: String,
-    var date: Long = System.currentTimeMillis(),
+    var dateCreated: Long = System.currentTimeMillis(),
+    var dateModified: String,
     var mediaUri: String = "",
 )
 
@@ -90,7 +91,8 @@ fun BlogItem(
                     modifier = Modifier.padding(bottom = 5.dp),
                     maxLines = 3,
                 )
-                // DATE
+
+                // DATE CREATED & MODIFIED
                 Text(
                     text = buildAnnotatedString {
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
@@ -100,10 +102,26 @@ fun BlogItem(
                         // Normal weight
                         append(
                             SimpleDateFormat("MM/dd/yyyy: hh:mm a", Locale.getDefault()).format(
-                            Date(blogPost.date)
-                        ))
+                                Date(blogPost.dateCreated)
+                            ))
                     }
                 )
+                if (blogPost.dateModified != blogPost.dateCreated.toString()) {
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
+                                // Medium weight
+                                append("Modified: ")
+                            }
+                            // Normal weight
+                            append(
+                                SimpleDateFormat("MM/dd/yyyy: hh:mm a", Locale.getDefault()).format(
+                                    Date(blogPost.dateModified.toLong())
+                                ))
+                        }
+                    )
+                }
+
             }
             Column(
                 verticalArrangement = Arrangement.Center,

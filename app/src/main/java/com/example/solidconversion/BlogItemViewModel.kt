@@ -119,6 +119,10 @@ class BlogItemViewModel(
 
 
     suspend fun insert(item: BlogItem) {
+        val stamped = if (item.dateModified.isBlank())
+            item.copy(dateModified = System.currentTimeMillis().toString())
+        else item
+
         val tempList = mutableListOf<BlogItem>()
         viewModelScope.launch {
             repository.insert(item)

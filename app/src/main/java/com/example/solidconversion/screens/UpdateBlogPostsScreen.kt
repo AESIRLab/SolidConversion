@@ -328,13 +328,14 @@ fun UpdateBlogPostsScreen() {
                     key(blog.id) {
                         AddEditBlogScreen(
                             blogItem = blogState,
-                            onSaveBlog = { _, title, subtitle, body, mediaUri ->
+                            onSaveBlog = { _, title, subtitle, body, _, mediaUri ->
                                 editBlogCoroutineScope.launch {
                                     viewModel.update(
                                         blogState!!.copy(
                                             title = title,
                                             subtitle = subtitle,
                                             body = body,
+                                            dateModified = System.currentTimeMillis().toString(),
                                             mediaUri = mediaUri
                                         )
                                     )
@@ -353,7 +354,7 @@ fun UpdateBlogPostsScreen() {
             composable(route = BlogScreens.AddEditBlogScreen.name) {
                 val addBlogCoroutineScope = rememberCoroutineScope()
                 AddEditBlogScreen(
-                    onSaveBlog = { _, title, subtitle, body, mediaUri ->
+                    onSaveBlog = { _, title, subtitle, body, _, mediaUri ->
                         addBlogCoroutineScope.launch {
                             viewModel.insert(
                                 BlogItem(
@@ -361,6 +362,7 @@ fun UpdateBlogPostsScreen() {
                                     title = title,
                                     subtitle = subtitle,
                                     body = body,
+                                    dateModified = System.currentTimeMillis().toString(),
                                     mediaUri = mediaUri
                                 )
                             )

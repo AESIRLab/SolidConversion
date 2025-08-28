@@ -24,6 +24,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,13 +44,14 @@ import com.example.solidconversion.model.BlogItem
 @Composable
 fun AddEditBlogScreen(
     blogItem: BlogItem? = null,
-    onSaveBlog: (String, String, String, String, String) -> Unit,
+    onSaveBlog: (String, String, String, String, String, String) -> Unit,
     onCancel: () -> Unit
 ) {
     var id by remember { mutableStateOf(blogItem?.id ?: "") }
     var title by remember { mutableStateOf(blogItem?.title ?: "") }
     var subtitle by remember { mutableStateOf(blogItem?.subtitle ?: "") }
     var body by remember { mutableStateOf(blogItem?.body ?: "") }
+    var dateModified by remember {mutableStateOf(blogItem?.dateModified ?: "") }
     var mediaUri by remember(blogItem?.mediaUri) { mutableStateOf(blogItem?.mediaUri?.let(Uri::parse)?: "")}
 
     val context = LocalContext.current
@@ -149,6 +151,7 @@ fun AddEditBlogScreen(
                             title,
                             subtitle,
                             body,
+                            dateModified,
                             mediaUri.toString()
                         )
                     }
