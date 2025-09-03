@@ -51,7 +51,6 @@ fun AddEditBlogScreen(
     var title by remember { mutableStateOf(blogItem?.title ?: "") }
     var subtitle by remember { mutableStateOf(blogItem?.subtitle ?: "") }
     var body by remember { mutableStateOf(blogItem?.body ?: "") }
-    var dateModified by remember {mutableLongStateOf(blogItem?.dateModified ?: 0) }
     var mediaUri by remember(blogItem?.mediaUri) { mutableStateOf(blogItem?.mediaUri?.let(Uri::parse)?: "")}
 
     val context = LocalContext.current
