@@ -49,7 +49,7 @@ fun UnfetchableWebIdScreen(
         verticalArrangement =  Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
         horizontalAlignment =  Alignment.CenterHorizontally,
     ) {
-        val appTitle = "Solid Blog Thread"
+        val appTitle = "SolidBlog"
         var solidProvider by rememberSaveable {
             mutableStateOf("")
         }

@@ -61,6 +61,7 @@ import com.example.solidconversion.BlogItemViewModel
 import com.example.solidconversion.BlogList
 import com.example.solidconversion.model.BlogItem
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -69,6 +70,7 @@ import org.skCompiler.generatedModel.AuthTokenStore
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.time.Duration.Companion.seconds
 
 @RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,6 +102,7 @@ fun UpdateBlogPostsScreen() {
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
+                viewModel.fetchRemoteList()
                 val webId = store.getWebId().first()
                 viewModel.updateWebId(webId)
                 if (!viewModel.remoteIsAvailable()) {
@@ -112,7 +115,6 @@ fun UpdateBlogPostsScreen() {
                         webId,
                         expirationTime
                     )
-                    viewModel.fetchRemoteList()
                 } else {    }
             }
         }
@@ -164,7 +166,7 @@ fun UpdateBlogPostsScreen() {
                         horizontalArrangement = Arrangement.SpaceBetween)
                     {
                         Text(
-                            "Solid Blog Thread",
+                            "SolidBlog",
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -326,27 +328,32 @@ fun UpdateBlogPostsScreen() {
                 }
                 val blogState by viewModel.BlogItem.collectAsState()
                 val editBlogCoroutineScope = rememberCoroutineScope()
+
                 blogState?.let { blog ->
                     key(blog.id) {
                         AddEditBlogScreen(
                             blogItem = blogState,
-                            onSaveBlog = { _, title, subtitle, body, _, mediaUri ->
+                            onSaveBlog = { _, title, subtitle, body, mediaUri ->
+                                val updated = blog.copy(
+                                    title = title,
+                                    subtitle = subtitle,
+                                    body = body,
+                                    dateModified = System.currentTimeMillis(),
+                                    mediaUri = mediaUri
+                                )
                                 editBlogCoroutineScope.launch {
-                                    viewModel.update(
-                                        blogState!!.copy(
-                                            title = title,
-                                            subtitle = subtitle,
-                                            body = body,
-                                            dateModified = System.currentTimeMillis().toString(),
-                                            mediaUri = mediaUri
-                                        )
-                                    )
-                                    navController.navigate(BlogScreens.BlogList.name)
+                                    try {
+                                        viewModel.update(updated)
+                                        navController.navigate(BlogScreens.BlogList.name) {
+                                            launchSingleTop = true
+                                            popUpTo(BlogScreens.BlogList.name) { inclusive = false }
+                                        }
+                                    } catch (e: Exception) {
+                                        Log.e("UpdateBlog", "Failed to update blog", e)
+                                    }
                                 }
                             },
-                            onCancel = {
-                                navController.navigate(BlogScreens.BlogList.name)
-                            }
+                            onCancel = { navController.navigate(BlogScreens.BlogList.name) }
                         )
                     }
                 }
@@ -356,7 +363,7 @@ fun UpdateBlogPostsScreen() {
             composable(route = BlogScreens.AddEditBlogScreen.name) {
                 val addBlogCoroutineScope = rememberCoroutineScope()
                 AddEditBlogScreen(
-                    onSaveBlog = { _, title, subtitle, body, _, mediaUri ->
+                    onSaveBlog = { _, title, subtitle, body, mediaUri ->
                         addBlogCoroutineScope.launch {
                             viewModel.insert(
                                 BlogItem(
@@ -364,7 +371,7 @@ fun UpdateBlogPostsScreen() {
                                     title = title,
                                     subtitle = subtitle,
                                     body = body,
-                                    dateModified = System.currentTimeMillis().toString(),
+                                    dateModified = 0,
                                     mediaUri = mediaUri
                                 )
                             )

@@ -53,7 +53,7 @@ fun StartAuthScreen(
         verticalArrangement =  Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
         horizontalAlignment =  Alignment.CenterHorizontally,
     ) {
-        val appTitle = "Solid Blog Thread"
+        val appTitle = "SolidBlog"
         var webId by rememberSaveable {
             mutableStateOf("https://id.inrupt.com/solidev")
         }

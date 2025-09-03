@@ -1,6 +1,7 @@
 package com.example.solidconversion.model
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -47,7 +48,7 @@ data class BlogItem(
     var subtitle: String,
     var body: String,
     var dateCreated: Long = System.currentTimeMillis(),
-    var dateModified: String,
+    var dateModified: Long,
     var mediaUri: String = "",
 )
 
@@ -106,7 +107,7 @@ fun BlogItem(
                             ))
                     }
                 )
-                if (blogPost.dateModified != blogPost.dateCreated.toString()) {
+                if (blogPost.dateModified != 0.toLong()) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
@@ -140,7 +141,10 @@ fun BlogItem(
                 }
                 Row(modifier = Modifier.padding(top = 6.dp)) {
                     // EDIT BUTTON
-                    IconButton(onClick = { onEdit(blogPost) }) {
+                    IconButton(onClick = {
+                        Log.d("BLOG ITEM CONTENTS:", "${blogPost.dateModified}")
+                        onEdit(blogPost)
+                    }) {
                         Icon(
                             Icons.Filled.Edit,
                             contentDescription = "Edit blog",

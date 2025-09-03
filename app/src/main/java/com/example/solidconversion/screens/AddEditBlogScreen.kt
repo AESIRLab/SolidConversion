@@ -44,14 +44,14 @@ import com.example.solidconversion.model.BlogItem
 @Composable
 fun AddEditBlogScreen(
     blogItem: BlogItem? = null,
-    onSaveBlog: (String, String, String, String, String, String) -> Unit,
+    onSaveBlog: (String, String, String, String, String) -> Unit,
     onCancel: () -> Unit
 ) {
     var id by remember { mutableStateOf(blogItem?.id ?: "") }
     var title by remember { mutableStateOf(blogItem?.title ?: "") }
     var subtitle by remember { mutableStateOf(blogItem?.subtitle ?: "") }
     var body by remember { mutableStateOf(blogItem?.body ?: "") }
-    var dateModified by remember {mutableStateOf(blogItem?.dateModified ?: "") }
+    var dateModified by remember {mutableLongStateOf(blogItem?.dateModified ?: 0) }
     var mediaUri by remember(blogItem?.mediaUri) { mutableStateOf(blogItem?.mediaUri?.let(Uri::parse)?: "")}
 
     val context = LocalContext.current
@@ -151,7 +151,6 @@ fun AddEditBlogScreen(
                             title,
                             subtitle,
                             body,
-                            dateModified,
                             mediaUri.toString()
                         )
                     }

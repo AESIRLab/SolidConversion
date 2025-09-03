@@ -13,8 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.skCompiler.generatedModel.BlogItemRemoteDataSource
 import org.skCompiler.generatedModel.BlogItemRepository
 
@@ -119,10 +121,6 @@ class BlogItemViewModel(
 
 
     suspend fun insert(item: BlogItem) {
-        val stamped = if (item.dateModified.isBlank())
-            item.copy(dateModified = System.currentTimeMillis().toString())
-        else item
-
         val tempList = mutableListOf<BlogItem>()
         viewModelScope.launch {
             repository.insert(item)
@@ -175,14 +173,21 @@ class BlogItemViewModel(
     }
 
     suspend fun update(item: BlogItem) {
-        viewModelScope.launch {
+        withContext(Dispatchers.IO) {
             repository.update(item)
-            repository.allBlogItemsAsFlow.collect { list ->
-                _allItems.value = list
-            }
-            remoteDataSource.updateRemoteItemList(_allItems.value)
+        }
+
+        val list = repository.allBlogItemsAsFlow.first()
+
+        withContext(Dispatchers.Main) {
+            _allItems.value = list
+        }
+
+        withContext(Dispatchers.IO) {
+            remoteDataSource.updateRemoteItemList(list)
         }
     }
+
 
     private fun merge(remote: List<BlogItem>, local: List<BlogItem>): List<BlogItem> =
         (remote + local).distinctBy { it.id }
