@@ -55,7 +55,7 @@ fun StartAuthScreen(
     ) {
         val appTitle = "SolidBlog"
         var webId by rememberSaveable {
-            mutableStateOf("https://id.inrupt.com/solidev")
+            mutableStateOf("")
         }
 
         Image(
