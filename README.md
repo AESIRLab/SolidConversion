@@ -83,11 +83,9 @@
    - Reference file in repo.
 3. Create _StartAuthScreen.kt, AuthCompleteScreen.kt,_ and _UnfetchableWebIdScreen.kt_:
    - Reference files in repo.
-   - For _StartAuthScreen.kt,_ you'll need to modify the following block of code:
+   - For _StartAuthScreen.kt,_ you'll need to modify the following line of code:
      - ```
        val appTitle = "<APP TITLE HERE>"
-       var webId by rememberSaveable {
-         mutableStateOf("<POD URL HERE>")
        ```
 4. In the _build.gradle.kts (:app)_, add the following to the Android block:
    - ```
