@@ -77,7 +77,7 @@
 12. Project _**should**_ be buildable.
 
 ## Creating/Modifying Necessary Files:
-1. Create _Application.kt_ file:
+1. Create _SolidConversionApplication.kt_ file:
    - Reference file in repo.
 2. Create _Authorization.kt_ file to authorize Pod:
    - Reference file in repo.
